@@ -11,8 +11,10 @@
 
   <div id="counterstream">
     <h2><a target="_blank" href="http://counterstreamradio.net/">Counterstream Radio</a></h2>
-    <p class="title">The People United Will Never Be Defeated!</p>
-    <p class="composer">Frederic Rzewski</p>
+    {{ with .counterstream }}
+    <p class="title">{{ .Title }}</p>
+    <p class="composer">{{ .Composer }}</p>
+    {{ end }}
   </div>
 
   <div id="q2">

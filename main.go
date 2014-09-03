@@ -24,5 +24,6 @@ func index(w http.ResponseWriter, r *http.Request) {
 		fmt.Println("There was an error parsing the template:", err.Error())
 	}
 	tmpl_vars := make(map[string]interface{})
+	tmpl_vars["counterstream"] = counterstream()
 	t.Execute(w, tmpl_vars)
 }
