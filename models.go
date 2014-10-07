@@ -11,8 +11,8 @@ import (
 )
 
 type Piece struct {
-	Title    string
-	Composer string
+	Title    string `json:"title"`
+	Composer string `json:"composer"`
 }
 
 type SecondInversionFeed struct {
