@@ -25,5 +25,6 @@ func index(w http.ResponseWriter, r *http.Request) {
 	}
 	tmpl_vars := make(map[string]interface{})
 	// tmpl_vars["counterstream"] = counterstream()
+	tmpl_vars["secondInversion"] = secondInversion()
 	t.Execute(w, tmpl_vars)
 }

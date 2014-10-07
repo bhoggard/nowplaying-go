@@ -5,8 +5,15 @@ import (
 	"code.google.com/p/go-charset/charset"
 	_ "code.google.com/p/go-charset/data"
 	"encoding/xml"
+	"io/ioutil"
 	"log"
+	"net/http"
 )
+
+const q2Url = "http://www.wqxr.org/api/whats_on/q2/2/"
+const counterstreamUrl = "http://www.live365.com/pls/front?handler=playlist&cmd=view&viewType=xml&handle=amcenter&maxEntries=1"
+const secondInversionUrl = "http://filesource.abacast.com/king/TRE/inversion2.xml"
+const yleUrl = "http://yle.fi/radiomanint/LiveXML/r17/item(0).xml"
 
 type Piece struct {
 	Title    string
@@ -23,17 +30,27 @@ type SecondInversionAudio struct {
 	Composer string `xml:"composer"`
 }
 
+func checkErr(err error, msg string) {
+	if err != nil {
+		log.Fatalln(msg, err)
+	}
+}
+
 func translateSecondInversion(data []byte) Piece {
 	var feed SecondInversionFeed
-
 	reader := bytes.NewReader(data)
 	decoder := xml.NewDecoder(reader)
 	decoder.CharsetReader = charset.NewReader
 	err := decoder.Decode(&feed)
-
-	if err != nil {
-		log.Fatal("decoder error:", err)
-	}
-
+	checkErr(err, "translateSecondInversion decode error")
 	return Piece{feed.Audio.Title, feed.Audio.Composer}
+}
+
+func secondInversion() Piece {
+	resp, err := http.Get(secondInversionUrl)
+	checkErr(err, "failed get of secondInversion feed")
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	checkErr(err, "failed to read respsone body")
+	return translateSecondInversion(body)
 }
