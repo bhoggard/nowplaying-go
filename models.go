@@ -10,11 +10,6 @@ import (
 	"net/http"
 )
 
-const q2Url = "http://www.wqxr.org/api/whats_on/q2/2/"
-const counterstreamUrl = "http://www.live365.com/pls/front?handler=playlist&cmd=view&viewType=xml&handle=amcenter&maxEntries=1"
-const secondInversionUrl = "http://filesource.abacast.com/king/TRE/inversion2.xml"
-const yleUrl = "http://yle.fi/radiomanint/LiveXML/r17/item(0).xml"
-
 type Piece struct {
 	Title    string
 	Composer string
