@@ -16,7 +16,7 @@ type Piece struct {
 }
 
 type SecondInversionFeed struct {
-	XMLName xml.Name             `xml:nexgen_audio_export`
+	XMLName xml.Name             `xml:"nexgen_audio_export"`
 	Audio   SecondInversionAudio `xml:"audio"`
 }
 
