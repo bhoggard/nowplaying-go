@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"io/ioutil"
 	"net/http"
 	"path"
 )
@@ -17,11 +16,16 @@ func index(w http.ResponseWriter, r *http.Request) {
 	http.ServeFile(w, r, fp)
 }
 
+func counterstreamJSON(w http.ResponseWriter, r *http.Request) {
+	piece := counterstream()
+	js, err := json.Marshal(piece)
+	checkErr(err, "json.Marshal failed")
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(js)
+}
+
 func secondInversionJSON(w http.ResponseWriter, r *http.Request) {
-	resp, err := http.Get(secondInversionUrl)
-	checkErr(err, "Get(secondInversionUrl) failed")
-	body, _ := ioutil.ReadAll(resp.Body)
-	piece := translateSecondInversion(body)
+	piece := secondInversion()
 	js, err := json.Marshal(piece)
 	checkErr(err, "json.Marshal failed")
 	w.Header().Set("Content-Type", "application/json")

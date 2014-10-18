@@ -15,6 +15,16 @@ type Piece struct {
 	Composer string `json:"composer"`
 }
 
+type CounterstreamFeed struct {
+	XMLName xml.Name           `xml:"Playlist"`
+	Entry   CounterstreamEntry `xml:"PlaylistEntry"`
+}
+
+type CounterstreamEntry struct {
+	Title  string
+	Artist string
+}
+
 type SecondInversionFeed struct {
 	XMLName xml.Name             `xml:"nexgen_audio_export"`
 	Audio   SecondInversionAudio `xml:"audio"`
@@ -29,6 +39,22 @@ func checkErr(err error, msg string) {
 	if err != nil {
 		log.Fatalln(msg, err)
 	}
+}
+
+func translateCounterstream(data []byte) Piece {
+	var feed CounterstreamFeed
+	err := xml.Unmarshal(data, &feed)
+	checkErr(err, "translateCounterstream unmarshal error")
+	return Piece{feed.Entry.Title, feed.Entry.Artist}
+}
+
+func counterstream() Piece {
+	resp, err := http.Get(counterstreamUrl)
+	checkErr(err, "failed get of counterstream feed")
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	checkErr(err, "failed to read response body")
+	return translateCounterstream(body)
 }
 
 func translateSecondInversion(data []byte) Piece {
@@ -46,6 +72,6 @@ func secondInversion() Piece {
 	checkErr(err, "failed get of secondInversion feed")
 	defer resp.Body.Close()
 	body, err := ioutil.ReadAll(resp.Body)
-	checkErr(err, "failed to read respsone body")
+	checkErr(err, "failed to read response body")
 	return translateSecondInversion(body)
 }
