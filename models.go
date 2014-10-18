@@ -35,6 +35,20 @@ type SecondInversionAudio struct {
 	Composer string `xml:"composer"`
 }
 
+type YleFeed struct {
+	XMLName xml.Name `xml:"RMPADEXPORT"`
+	Item    YleItem  `xml:"ITEM"`
+}
+
+type YleItem struct {
+	Composer    string         `xml:"COMPOSER,attr"`
+	PublishData YlePublishData `xml:"PUBLISH-DATA"`
+}
+
+type YlePublishData struct {
+	Title string `xml:"TEXT"`
+}
+
 func checkErr(err error, msg string) {
 	if err != nil {
 		log.Fatalln(msg, err)
@@ -74,4 +88,20 @@ func secondInversion() Piece {
 	body, err := ioutil.ReadAll(resp.Body)
 	checkErr(err, "failed to read response body")
 	return translateSecondInversion(body)
+}
+
+func translateYle(data []byte) Piece {
+	var feed YleFeed
+	err := xml.Unmarshal(data, &feed)
+	checkErr(err, "translateYle unmarshal error")
+	return Piece{feed.Item.PublishData.Title, feed.Item.Composer}
+}
+
+func yle() Piece {
+	resp, err := http.Get(yleUrl)
+	checkErr(err, "failed get of YLE feed")
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	checkErr(err, "failed to read response body")
+	return translateYle(body)
 }

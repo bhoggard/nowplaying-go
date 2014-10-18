@@ -6,6 +6,26 @@ import (
 	"testing"
 )
 
+func TestCounterstream(t *testing.T) {
+	content, err := ioutil.ReadFile("testdata/counterstream.xml")
+	if err != nil {
+		fmt.Println("Error opening file:", err)
+		return
+	}
+
+	piece := translateCounterstream(content)
+
+	expected := "Serenade"
+	if piece.Title != expected {
+		t.Errorf("Title = %v, expected %v", piece.Title, expected)
+	}
+
+	expected = "Edward T. Cone"
+	if piece.Composer != expected {
+		t.Errorf("Composer = %v, expected %v", piece.Composer, expected)
+	}
+}
+
 func TestSecondInversion(t *testing.T) {
 	content, err := ioutil.ReadFile("testdata/second-inversion.xml")
 	if err != nil {
@@ -26,21 +46,21 @@ func TestSecondInversion(t *testing.T) {
 	}
 }
 
-func TestCounterstream(t *testing.T) {
-	content, err := ioutil.ReadFile("testdata/counterstream.xml")
+func TestYle(t *testing.T) {
+	content, err := ioutil.ReadFile("testdata/yle.xml")
 	if err != nil {
 		fmt.Println("Error opening file:", err)
 		return
 	}
 
-	piece := translateCounterstream(content)
+	piece := translateYle(content)
 
-	expected := "Serenade"
+	expected := "Godard: Pianokonsertto n:o 1 a-molli. (Howard Shelley ja Tasmanian SO)."
 	if piece.Title != expected {
 		t.Errorf("Title = %v, expected %v", piece.Title, expected)
 	}
 
-	expected = "Edward T. Cone"
+	expected = "Godard, Benjamin [1849-1895]"
 	if piece.Composer != expected {
 		t.Errorf("Composer = %v, expected %v", piece.Composer, expected)
 	}

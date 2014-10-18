@@ -31,3 +31,11 @@ func secondInversionJSON(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	w.Write(js)
 }
+
+func yleJSON(w http.ResponseWriter, r *http.Request) {
+	piece := yle()
+	js, err := json.Marshal(piece)
+	checkErr(err, "json.Marshal failed")
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(js)
+}
