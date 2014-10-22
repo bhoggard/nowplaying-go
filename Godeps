@@ -1,0 +1,11 @@
+{
+	"ImportPath": "github.com/bhoggard/nowplaying-go",
+	"GoVersion": "go1.3.3",
+	"Deps": [
+		{
+			"ImportPath": "code.google.com/p/go-charset/charset",
+			"Comment": "null-32",
+			"Rev": "ebbeafdc430eb6c7e44e9a730a38eaff4c56ba3a"
+		}
+	]
+}
