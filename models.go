@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"code.google.com/p/go-charset/charset"
 	_ "code.google.com/p/go-charset/data"
+	"encoding/json"
 	"encoding/xml"
 	"io/ioutil"
 	"log"
@@ -23,6 +24,23 @@ type CounterstreamFeed struct {
 type CounterstreamEntry struct {
 	Title  string
 	Artist string
+}
+
+type Q2Feed struct {
+	Item Q2Item `json:"current_playlist_item"`
+}
+
+type Q2Item struct {
+	Entry Q2Entry `json:"catalog_entry"`
+}
+
+type Q2Entry struct {
+	Title    string
+	Composer Q2Composer `json:"composer"`
+}
+
+type Q2Composer struct {
+	Name string `json:"name"`
 }
 
 type SecondInversionFeed struct {
@@ -88,6 +106,22 @@ func secondInversion() Piece {
 	body, err := ioutil.ReadAll(resp.Body)
 	checkErr(err, "failed to read response body")
 	return translateSecondInversion(body)
+}
+
+func translateQ2(data []byte) Piece {
+	var feed Q2Feed
+	err := json.Unmarshal(data, &feed)
+	checkErr(err, "translateQ2 unmarshal error")
+	return Piece{feed.Item.Entry.Title, feed.Item.Entry.Composer.Name}
+}
+
+func q2() Piece {
+	resp, err := http.Get(q2Url)
+	checkErr(err, "failed get of Q2 feed")
+	defer resp.Body.Close()
+	body, err := ioutil.ReadAll(resp.Body)
+	checkErr(err, "failed to read response body")
+	return translateQ2(body)
 }
 
 func translateYle(data []byte) Piece {

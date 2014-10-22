@@ -26,6 +26,26 @@ func TestCounterstream(t *testing.T) {
 	}
 }
 
+func TestQ2(t *testing.T) {
+	content, err := ioutil.ReadFile("testdata/q2.json")
+	if err != nil {
+		fmt.Println("Error opening file:", err)
+		return
+	}
+
+	piece := translateQ2(content)
+
+	expected := "Turangalila-symphonie"
+	if piece.Title != expected {
+		t.Errorf("Title = %v, expected %v", piece.Title, expected)
+	}
+
+	expected = "Olivier Messiaen"
+	if piece.Composer != expected {
+		t.Errorf("Composer = %v, expected %v", piece.Composer, expected)
+	}
+}
+
 func TestSecondInversion(t *testing.T) {
 	content, err := ioutil.ReadFile("testdata/second-inversion.xml")
 	if err != nil {

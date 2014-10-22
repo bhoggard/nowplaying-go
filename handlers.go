@@ -24,6 +24,14 @@ func counterstreamJSON(w http.ResponseWriter, r *http.Request) {
 	w.Write(js)
 }
 
+func q2JSON(w http.ResponseWriter, r *http.Request) {
+	piece := q2()
+	js, err := json.Marshal(piece)
+	checkErr(err, "json.Marshal failed")
+	w.Header().Set("Content-Type", "application/json")
+	w.Write(js)
+}
+
 func secondInversionJSON(w http.ResponseWriter, r *http.Request) {
 	piece := secondInversion()
 	js, err := json.Marshal(piece)

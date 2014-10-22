@@ -12,6 +12,7 @@ func main() {
 	}
 	http.HandleFunc("/", index)
 	http.HandleFunc("/counterstream", counterstreamJSON)
+	http.HandleFunc("/q2", q2JSON)
 	http.HandleFunc("/second-inversion", secondInversionJSON)
 	http.HandleFunc("/yle", yleJSON)
 	fs := http.FileServer(http.Dir("static"))

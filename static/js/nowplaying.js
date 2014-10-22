@@ -37,7 +37,7 @@ function renderSection(id, data) {
 
 function renderPieces() {
   getCounterstream();
-  // getQ2();
+  getQ2();
   getSecondInversion();
   getYLE();
 }
